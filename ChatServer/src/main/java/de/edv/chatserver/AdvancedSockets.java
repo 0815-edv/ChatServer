@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2021 BackInBash.
+ * Copyright 2021 Markus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,48 +23,36 @@
  */
 package de.edv.chatserver;
 
+import de.protobuf.edv.ChatProtocol.User;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
  *
- * @author BackInBash
+ * @author Markus
  */
-public class Server {
+public class AdvancedSockets {
 
-    private int port = 2048;
-    private String ip;
+    private User user;
+    private Socket socket;
 
-    public Server(String ip, int port) {
-        this.port = port;
-        this.ip = ip;
+    public AdvancedSockets() {
     }
 
-    public Server() {
-
+    public AdvancedSockets(Socket socket, User user) throws IOException {
+        this.user = user;
+        this.socket = socket;
     }
 
-    /**
-     * Run SocketServer
-     */
-    public void start() {
+    public User getUser() {
+        return user;
+    }
 
-        try (ServerSocket serverSocket = new ServerSocket(port, 1024, InetAddress.getByName(ip))) {
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-            System.out.println("Server is listening on port " + port);
-
-            while (true) {
-                Socket socket = serverSocket.accept();
-                System.out.println("New client connected: " + socket.getInetAddress().getHostAddress());
-
-                new ServerThread(socket).start();
-            }
-
-        } catch (IOException ex) {
-            System.out.println("Server exception: " + ex.getMessage());
-            ex.printStackTrace();
-        }
+    public Socket getSocket() {
+        return this.socket;
     }
 }

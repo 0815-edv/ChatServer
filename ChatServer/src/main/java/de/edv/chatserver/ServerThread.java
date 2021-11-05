@@ -23,14 +23,12 @@
  */
 package de.edv.chatserver;
 
-import static de.edv.chatserver.Converter.deserialize;
-import static de.edv.chatserver.Converter.serialize;
-import java.io.BufferedReader;
+import com.google.protobuf.Any;
+import de.protobuf.edv.ChatProtocol.ChatMessage;
+import de.protobuf.edv.ChatProtocol.OnlineUsers;
+import de.protobuf.edv.ChatProtocol.User;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,19 +48,31 @@ public class ServerThread extends Thread {
     public void run() {
         try {
             InputStream input = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
-            OutputStream output = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(output, true);
+            Any data = Any.parseFrom(input.readAllBytes());
 
-            Message data;
+            if (data.is(User.class)) {
 
-            do {
-                data = (Message) deserialize(input.readAllBytes());
+                ConnectionHandler.addConnection(new AdvancedSockets(socket, data.unpack(User.class)));
 
-                writer.println("OK");
+                do {
+                    data = Any.parseFrom(input.readAllBytes());
 
-            } while (!socket.isConnected());
+                    if (data.is(ChatMessage.class)) {
+                        // Send Message
+                        ChatMessage msg = data.unpack(ChatMessage.class);
+                        if (msg.getToUser().getUsername() != "") {
+                            ConnectionHandler.sendUnicast(msg.getToUser(), msg.getMsg());
+                        } else {
+                            ConnectionHandler.sendBrodcast(msg.getMsg());
+                        }
+
+                    } else if (data.is(OnlineUsers.class)) {
+                        // Send Online Users
+                    }
+
+                } while (!socket.isConnected());
+            }
 
             socket.close();
 
@@ -74,8 +84,6 @@ public class ServerThread extends Thread {
             } catch (IOException ex1) {
                 Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex1);
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
