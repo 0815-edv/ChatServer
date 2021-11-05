@@ -24,8 +24,8 @@ message User {
         AFK = 1;
         NOT_DISTURBE = 2;
     }
-    string username = 1;
-    Status status = 2;
+    Status status = 1;
+    string username = 2;
     string color = 3;
 }
 
