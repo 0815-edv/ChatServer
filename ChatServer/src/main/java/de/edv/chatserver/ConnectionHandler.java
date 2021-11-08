@@ -74,7 +74,8 @@ public class ConnectionHandler {
                 ChatMessage message = ChatMessage.newBuilder().setType(ChatMessage.Type.SEND).setMsg(msg).setArrivalTime(System.currentTimeMillis()).build();
                 OutputStream output = sock.getSocket().getOutputStream();
 
-                output.write(message.toByteArray());
+                message.writeTo(output);
+                output.close();
             } else {
                 // Close Socket if not Connected
                 try {
@@ -99,7 +100,8 @@ public class ConnectionHandler {
                 ChatMessage message = ChatMessage.newBuilder().setType(ChatMessage.Type.SEND).setMsg(msg).setArrivalTime(System.currentTimeMillis()).build();
                 OutputStream output = sock.getSocket().getOutputStream();
 
-                output.write(message.toByteArray());
+                message.writeTo(output);
+                output.close();
             } else {
                 // Close Socket if not Connected
                 try {

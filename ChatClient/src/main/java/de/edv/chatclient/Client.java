@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +39,7 @@ import java.util.logging.Logger;
  * @author Markus
  */
 public class Client {
+
     private String ip;
     private int port = 2048;
     private Socket socket;
@@ -51,33 +51,36 @@ public class Client {
         this.user = user;
     }
 
-    public OnlineUsers getOnlineUsers() throws IOException{
+    public OnlineUsers getOnlineUsers() throws IOException {
         OutputStream output = socket.getOutputStream();
         OnlineUsers ou = OnlineUsers.newBuilder().setUsers(0, User.newBuilder().setColor("").setUsername("").setStatus(User.Status.ONLINE).build()).build();
-        
+
         // Send Request
-        output.write(ou.toByteArray());
-        
+        ou.writeTo(output);
+        output.close();
+
         // Get Response
         InputStream input = socket.getInputStream();
         Any data = Any.parseFrom(input.readAllBytes());
-        if (data.is(OnlineUsers.class)){
+        input.close();
+        if (data.is(OnlineUsers.class)) {
             return data.unpack(OnlineUsers.class);
         }
         return null;
     }
-    
-    public void startMessageThread(javax.swing.JTextArea chat){
+
+    public void startMessageThread(javax.swing.JTextArea chat) {
         new ChatThread(this.socket, chat).start();
     }
-    
-    public void sendMessage(String message) throws IOException{
+
+    public void sendMessage(String message) throws IOException {
         OutputStream output = socket.getOutputStream();
         ChatMessage msg = ChatMessage.newBuilder().setArrivalTime(System.currentTimeMillis()).setFromUser(user).setMsg(message).setType(ChatMessage.Type.SEND).build();
         // Send Request
-        output.write(msg.toByteArray());
+        msg.writeTo(output);
+        output.close();
     }
-    
+
     public void connect() {
         try {
             socket = new Socket(ip, port);

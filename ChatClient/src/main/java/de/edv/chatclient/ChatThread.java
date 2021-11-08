@@ -50,6 +50,7 @@ public class ChatThread extends Thread {
             try {
                 InputStream input = socket.getInputStream();
                 Any data = Any.parseFrom(input.readAllBytes());
+                input.close();
                 if (data.is(ChatMessage.class)){
                     ChatMessage msg = data.unpack(ChatMessage.class);
                     chat.append(msg.getFromUser().getUsername()+": "+msg.getMsg());

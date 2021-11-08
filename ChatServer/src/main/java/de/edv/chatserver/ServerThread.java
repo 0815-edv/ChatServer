@@ -57,6 +57,7 @@ public class ServerThread extends Thread {
 
                 do {
                     data = Any.parseFrom(input.readAllBytes());
+                    input.close();
 
                     if (data.is(ChatMessage.class)) {
                         // Send Message
