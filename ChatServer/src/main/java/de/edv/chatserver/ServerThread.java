@@ -29,6 +29,7 @@ import de.protobuf.edv.ChatProtocol.OnlineUsers;
 import de.protobuf.edv.ChatProtocol.User;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,16 +50,17 @@ public class ServerThread extends Thread {
         try {
             InputStream input = socket.getInputStream();
 
-            Any data = Any.parseFrom(input.readAllBytes());
+            do {
+                byte[] buf = input.readAllBytes();
+                Any data = Any.parseFrom(buf);
+                if (buf.length > 0) {
+                    System.out.println("Processed Input Stream");
+                    if (data.is(OnlineUsers.class)) {
 
-            if (data.is(User.class)) {
-
-                ConnectionHandler.addConnection(new AdvancedSockets(socket, data.unpack(User.class)));
-
-                do {
-                    data = Any.parseFrom(input.readAllBytes());
-                    input.close();
-
+                        System.out.println("Get User Info");
+                        ConnectionHandler.addConnection(new AdvancedSockets(socket, data.unpack(User.class)));
+                        ConnectionHandler.sendOnlineUserInfo(socket);
+                    }
                     if (data.is(ChatMessage.class)) {
                         // Send Message
                         ChatMessage msg = data.unpack(ChatMessage.class);
@@ -68,14 +70,14 @@ public class ServerThread extends Thread {
                             ConnectionHandler.sendBrodcast(msg.getMsg());
                         }
 
-                    } else if (data.is(OnlineUsers.class)) {
-                        // Send Online Users
                     }
+                    if (data.is(User.class)) {
+                        System.out.println("");
+                    }
+                }
+                Thread.sleep(300);
 
-                } while (!socket.isConnected());
-            }
-
-            socket.close();
+            } while (socket.isConnected());
 
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
@@ -85,6 +87,8 @@ public class ServerThread extends Thread {
             } catch (IOException ex1) {
                 Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex1);
             }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

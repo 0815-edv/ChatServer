@@ -53,16 +53,17 @@ public class Client {
 
     public OnlineUsers getOnlineUsers() throws IOException {
         OutputStream output = socket.getOutputStream();
-        OnlineUsers ou = OnlineUsers.newBuilder().setUsers(0, User.newBuilder().setColor("").setUsername("").setStatus(User.Status.ONLINE).build()).build();
+        OnlineUsers.Builder ou = OnlineUsers.newBuilder();
 
+        ou.addUsers(User.newBuilder().setColor("").setUsername(user.getUsername()).setStatus(User.Status.ONLINE));
+        
         // Send Request
-        ou.writeTo(output);
+        ou.build().writeTo(output);
         output.close();
 
         // Get Response
         InputStream input = socket.getInputStream();
         Any data = Any.parseFrom(input.readAllBytes());
-        input.close();
         if (data.is(OnlineUsers.class)) {
             return data.unpack(OnlineUsers.class);
         }
@@ -78,7 +79,6 @@ public class Client {
         ChatMessage msg = ChatMessage.newBuilder().setArrivalTime(System.currentTimeMillis()).setFromUser(user).setMsg(message).setType(ChatMessage.Type.SEND).build();
         // Send Request
         msg.writeTo(output);
-        output.close();
     }
 
     public void connect() {

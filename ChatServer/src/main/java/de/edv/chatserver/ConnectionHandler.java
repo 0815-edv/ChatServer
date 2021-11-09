@@ -23,10 +23,13 @@
  */
 package de.edv.chatserver;
 
+import de.protobuf.edv.ChatProtocol;
 import de.protobuf.edv.ChatProtocol.ChatMessage;
+import de.protobuf.edv.ChatProtocol.OnlineUsers;
 import de.protobuf.edv.ChatProtocol.User;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -112,4 +115,25 @@ public class ConnectionHandler {
             }
         }
     }
+
+    public static void sendOnlineUserInfo(Socket socket) throws IOException {
+        OnlineUsers.Builder ou = OnlineUsers.newBuilder();
+        if (socket.isConnected()) {
+            OutputStream output = socket.getOutputStream();
+            for (AdvancedSockets sock : openConnections) {
+                ou.addUsers(sock.getUser());
+            }
+            ou.build().writeTo(output);
+            output.close();
+        } else {
+            // Close Socket if not Connected
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
 }
