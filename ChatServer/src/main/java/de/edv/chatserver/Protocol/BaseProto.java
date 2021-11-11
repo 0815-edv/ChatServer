@@ -21,43 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.edv.chatserver;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package de.edv.chatserver.Protocol;
 
 /**
  *
  * @author Markus
  */
-public class ServerThread extends Thread {
-
-    private Socket socket;
-
-    public ServerThread(Socket socket) {
-        this.socket = socket;
-    }
-
-    public void run() {
-        try {
-            InputStream input = socket.getInputStream();
-
-            do {
-                // Process Request
-
-            } while (socket.isConnected());
-
-        } catch (IOException ex) {
-            System.out.println("Server exception: " + ex.getMessage());
-            ex.printStackTrace();
-            try {
-                socket.close();
-            } catch (IOException ex1) {
-                Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        }
-    }
+public interface BaseProto {
+    public byte[] convert();
 }

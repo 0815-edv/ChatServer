@@ -21,38 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.edv.chatserver;
-
-import de.protobuf.edv.ChatProtocol.User;
-import java.io.IOException;
-import java.net.Socket;
+package de.edv.chatserver.Protocol;
 
 /**
  *
  * @author Markus
  */
-public class AdvancedSockets {
-
-    private User user;
-    private Socket socket;
-
-    public AdvancedSockets() {
-    }
-
-    public AdvancedSockets(Socket socket, User user) throws IOException {
-        this.user = user;
-        this.socket = socket;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Socket getSocket() {
-        return this.socket;
-    }
+public enum StatusType {
+    ONLINE,
+    AFK,
+    OFFLINE
 }

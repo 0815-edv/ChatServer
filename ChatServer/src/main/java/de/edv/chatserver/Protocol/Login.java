@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2021 BackInBash.
+ * Copyright 2021 Markus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,41 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.edv.chatserver;
-
-import java.awt.Color;
+package de.edv.chatserver.Protocol;
 
 /**
  *
- * @author BackInBash
+ * @author Markus
  */
-public class Message {
+public class Login implements BaseProto {
 
-    private String username;
-    private String message;
-    private Color color;
+    private final byte LOGIN = (byte) 0xf1;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
+    @Override
+    public byte[] convert() {
+        byte[] b = new byte[1];
+        b[0] = LOGIN;
+        return b;
     }
 }
