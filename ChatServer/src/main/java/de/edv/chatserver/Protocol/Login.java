@@ -29,12 +29,10 @@ package de.edv.chatserver.Protocol;
  */
 public class Login implements BaseProto {
 
-    private final byte LOGIN = (byte) 0xf1;
-
     @Override
     public byte[] convert() {
         byte[] b = new byte[1];
-        b[0] = LOGIN;
+        b[0] = PayloadType.LOGIN;
         return b;
     }
 }

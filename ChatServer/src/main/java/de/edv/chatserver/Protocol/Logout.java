@@ -29,12 +29,10 @@ package de.edv.chatserver.Protocol;
  */
 public class Logout implements BaseProto {
 
-    private final byte LOGOUT = (byte) 0xf2;
-
     @Override
     public byte[] convert() {
         byte[] b = new byte[1];
-        b[0] = LOGOUT;
+        b[0] = PayloadType.LOGOUT;
         return b;
     }
 }

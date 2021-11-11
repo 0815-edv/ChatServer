@@ -32,7 +32,6 @@ import java.nio.charset.StandardCharsets;
  * @author Markus
  */
 public class User implements BaseProto {
-    private byte MESSAGE = (byte) 0xA1;
     private String username;
     private Color color;
     private StatusType status;
@@ -65,7 +64,7 @@ public class User implements BaseProto {
     public byte[] convert() {
         // ( ͡° ͜ʖ ͡°)
         byte[] type = new byte[1];
-        type[0] = MESSAGE;
+        type[0] = PayloadType.USER;
 
         byte[] data = (new Gson().toJson(this)).getBytes(StandardCharsets.UTF_8);
 

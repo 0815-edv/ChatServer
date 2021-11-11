@@ -34,7 +34,6 @@ import java.util.List;
  */
 public class Message implements BaseProto {
 
-    private byte MESSAGE = (byte) 0xA0;
     private User sender;
     private User reciever;
     private MessageType type;
@@ -76,7 +75,7 @@ public class Message implements BaseProto {
     public byte[] convert() {
         // ( ͡° ͜ʖ ͡°)
         byte[] type = new byte[1];
-        type[0] = MESSAGE;
+        type[0] = PayloadType.MESSAGE;
 
         byte[] data = (new Gson().toJson(this)).getBytes(StandardCharsets.UTF_8);
 
