@@ -75,7 +75,7 @@ public class Message implements BaseProto {
     public byte[] convert() {
         // ( ͡° ͜ʖ ͡°)
         byte[] type = new byte[1];
-        type[0] = PayloadType.MESSAGE;
+        type[0] = PayloadOffset.MESSAGE;
 
         byte[] data = (new Gson().toJson(this)).getBytes(StandardCharsets.UTF_8);
 

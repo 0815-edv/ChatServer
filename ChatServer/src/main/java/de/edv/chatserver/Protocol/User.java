@@ -64,7 +64,7 @@ public class User implements BaseProto {
     public byte[] convert() {
         // ( ͡° ͜ʖ ͡°)
         byte[] type = new byte[1];
-        type[0] = PayloadType.USER;
+        type[0] = PayloadOffset.USER;
 
         byte[] data = (new Gson().toJson(this)).getBytes(StandardCharsets.UTF_8);
 

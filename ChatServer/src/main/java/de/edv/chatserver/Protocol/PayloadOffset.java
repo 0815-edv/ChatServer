@@ -27,7 +27,7 @@ package de.edv.chatserver.Protocol;
  *
  * @author Markus
  */
-public class PayloadType {
+public class PayloadOffset {
     public static final byte LOGIN = (byte)0x01;
     public static final byte LOGOUT = (byte)0x02;
     public static final byte MESSAGE = (byte)0x03;

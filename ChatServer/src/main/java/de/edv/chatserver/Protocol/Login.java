@@ -32,7 +32,7 @@ public class Login implements BaseProto {
     @Override
     public byte[] convert() {
         byte[] b = new byte[1];
-        b[0] = PayloadType.LOGIN;
+        b[0] = PayloadOffset.LOGIN;
         return b;
     }
 }

@@ -32,7 +32,7 @@ public class Logout implements BaseProto {
     @Override
     public byte[] convert() {
         byte[] b = new byte[1];
-        b[0] = PayloadType.LOGOUT;
+        b[0] = PayloadOffset.LOGOUT;
         return b;
     }
 }
