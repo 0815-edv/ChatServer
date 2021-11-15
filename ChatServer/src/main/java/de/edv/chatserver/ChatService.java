@@ -23,6 +23,8 @@
  */
 package de.edv.chatserver;
 
+import de.edv.chatserver.Protocol.Login;
+import de.edv.chatserver.Protocol.Message;
 import de.edv.chatserver.Protocol.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +34,19 @@ import java.util.List;
  * @author hax0r
  */
 public class ChatService {
-    private static List<User> users = new ArrayList<User>();
+    private static List<Login> logins = new ArrayList<Login>();
+    
+    public static void login(Login user){
+        if(!logins.contains(user))
+            logins.add(user);
+    }
+    
+    public static void logout(Login user){
+        if(logins.contains(user))
+        logins.remove(user);
+    }
+    
+    public static void sendMessage(User from, User to, Message msg){
+        
+    }
 }
