@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2021 Markus.
+ * Copyright 2021 BackInBash.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,54 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.edv.chatserver.Protocol;
+package de.edv.chatserver;
 
 import com.google.gson.Gson;
-import static de.edv.chatserver.Helper.append;
-import java.awt.Color;
+import de.edv.chatserver.Protocol.PayloadOffset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  *
- * @author Markus
+ * @author BackInBash
  */
-public class User implements BaseProto {
-    private String username;
-    private Color color;
-    private StatusType status;
-
-    public String getUsername() {
-        return username;
+public class Helper {
+    public static byte[] resize(byte[] data){
+        return Arrays.copyOfRange(data, 1, data.length);
     }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public StatusType getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusType status) {
-        this.status = status;
-    }
-
-    @Override
-    public byte[] serialization() {
+    
+    public static byte[] append(Object input, byte offset){
         // ( ͡° ͜ʖ ͡°)
-        return append(this, PayloadOffset.USER);
-    }
+        byte[] type = new byte[1];
+        type[0] = offset;
 
-    @Override
-    public Object deserialization(byte[] data) {
-        return new Gson().fromJson(new String(data, StandardCharsets.UTF_8), this.getClass());
+        byte[] data = (new Gson().toJson(input)).getBytes(StandardCharsets.UTF_8);
+
+        byte[] destination = new byte[type.length + data.length];
+
+        // copy ciphertext into start of destination (from pos 0, copy ciphertext.length bytes)
+        System.arraycopy(type, 0, destination, 0, type.length);
+
+        // copy mac into end of destination (from pos ciphertext.length, copy mac.length bytes)
+        System.arraycopy(data, 0, destination, type.length, data.length);
+
+        return destination;
     }
 }

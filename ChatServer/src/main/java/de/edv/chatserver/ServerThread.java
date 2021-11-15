@@ -23,6 +23,12 @@
  */
 package de.edv.chatserver;
 
+import static de.edv.chatserver.Helper.resize;
+import de.edv.chatserver.Protocol.Login;
+import de.edv.chatserver.Protocol.Logout;
+import de.edv.chatserver.Protocol.Message;
+import de.edv.chatserver.Protocol.PayloadOffset;
+import de.edv.chatserver.Protocol.User;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -47,6 +53,21 @@ public class ServerThread extends Thread {
 
             do {
                 // Process Request
+                byte[] data = input.readAllBytes();
+                switch (data[0]) {
+                    case PayloadOffset.LOGIN -> {
+                        Login login = (Login) new Login().deserialization(resize(data));
+                    }
+                    case PayloadOffset.LOGOUT -> {
+                        Logout logout = (Logout) new Logout().deserialization(resize(data));
+                    }
+                    case PayloadOffset.MESSAGE -> {
+                        Message message = (Message) new Message().deserialization(resize(data));
+                    }
+                    case PayloadOffset.USER -> {
+                        User user = (User) new User().deserialization(resize(data));
+                    }
+                }
 
             } while (socket.isConnected());
 

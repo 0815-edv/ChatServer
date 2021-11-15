@@ -24,6 +24,7 @@
 package de.edv.chatserver.Protocol;
 
 import com.google.gson.Gson;
+import static de.edv.chatserver.Helper.append;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -71,21 +72,7 @@ public class Message implements BaseProto {
 
     @Override
     public byte[] serialization() {
-        // ( ͡° ͜ʖ ͡°)
-        byte[] type = new byte[1];
-        type[0] = PayloadOffset.MESSAGE;
-
-        byte[] data = (new Gson().toJson(this)).getBytes(StandardCharsets.UTF_8);
-
-        byte[] destination = new byte[type.length + data.length];
-
-        // copy ciphertext into start of destination (from pos 0, copy ciphertext.length bytes)
-        System.arraycopy(type, 0, destination, 0, type.length);
-
-        // copy mac into end of destination (from pos ciphertext.length, copy mac.length bytes)
-        System.arraycopy(data, 0, destination, type.length, data.length);
-
-        return destination;
+        return append(this, PayloadOffset.MESSAGE);
     }
 
     @Override

@@ -23,21 +23,33 @@
  */
 package de.edv.chatserver.Protocol;
 
+import com.google.gson.Gson;
+import static de.edv.chatserver.Helper.append;
+import java.nio.charset.StandardCharsets;
+
 /**
  *
  * @author Markus
  */
 public class Logout implements BaseProto {
 
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
     @Override
     public byte[] serialization() {
-        byte[] b = new byte[1];
-        b[0] = PayloadOffset.LOGOUT;
-        return b;
+       return append(this, PayloadOffset.LOGOUT);
     }
 
     @Override
     public Object deserialization(byte[] data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Gson().fromJson(new String(data, StandardCharsets.UTF_8), this.getClass());
     }
 }

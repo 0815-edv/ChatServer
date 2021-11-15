@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2021 Markus.
+ * Copyright 2021 hax0r.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,54 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.edv.chatserver.Protocol;
+package de.edv.chatserver;
 
-import com.google.gson.Gson;
-import static de.edv.chatserver.Helper.append;
-import java.awt.Color;
-import java.nio.charset.StandardCharsets;
+import de.edv.chatserver.Protocol.User;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
- * @author Markus
+ * @author hax0r
  */
-public class User implements BaseProto {
-    private String username;
-    private Color color;
-    private StatusType status;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public StatusType getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusType status) {
-        this.status = status;
-    }
-
-    @Override
-    public byte[] serialization() {
-        // ( ͡° ͜ʖ ͡°)
-        return append(this, PayloadOffset.USER);
-    }
-
-    @Override
-    public Object deserialization(byte[] data) {
-        return new Gson().fromJson(new String(data, StandardCharsets.UTF_8), this.getClass());
-    }
+public class ChatService {
+    private static List<User> users = new ArrayList<User>();
 }
