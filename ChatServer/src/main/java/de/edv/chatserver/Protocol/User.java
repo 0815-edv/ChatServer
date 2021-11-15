@@ -61,7 +61,7 @@ public class User implements BaseProto {
     }
 
     @Override
-    public byte[] convert() {
+    public byte[] serialization() {
         // ( ͡° ͜ʖ ͡°)
         byte[] type = new byte[1];
         type[0] = PayloadOffset.USER;
@@ -77,5 +77,10 @@ public class User implements BaseProto {
         System.arraycopy(data, 0, destination, type.length, data.length);
 
         return destination;
+    }
+
+    @Override
+    public Object deserialization(byte[] data) {
+        return new Gson().fromJson(new String(data, StandardCharsets.UTF_8), this.getClass());
     }
 }

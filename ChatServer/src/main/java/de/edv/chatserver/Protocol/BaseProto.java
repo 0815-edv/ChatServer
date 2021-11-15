@@ -28,5 +28,6 @@ package de.edv.chatserver.Protocol;
  * @author Markus
  */
 public interface BaseProto {
-    public byte[] convert();
+    public byte[] serialization();
+    public Object deserialization(byte[] data);
 }

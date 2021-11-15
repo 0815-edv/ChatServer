@@ -43,8 +43,8 @@ public class LoginTest implements ProtoTest {
     @Override
     @Test
     public void serialization() {
-        byte t = login.convert()[0];
-        if (login.convert()[0] == PayloadOffset.LOGIN) {
+        byte t = login.serialization()[0];
+        if (login.serialization()[0] == PayloadOffset.LOGIN) {
             assertTrue(true);
         } else {
             assertTrue(false);

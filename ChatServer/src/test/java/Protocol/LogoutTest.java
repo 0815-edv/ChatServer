@@ -43,7 +43,7 @@ public class LogoutTest implements ProtoTest {
     @Override
     @Test
     public void serialization() {
-        if((logout.convert()[0]) == PayloadOffset.LOGOUT){
+        if((logout.serialization()[0]) == PayloadOffset.LOGOUT){
             assertTrue(true);
         } else {
             assertTrue(false);

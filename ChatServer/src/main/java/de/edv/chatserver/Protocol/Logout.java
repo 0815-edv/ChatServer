@@ -30,9 +30,14 @@ package de.edv.chatserver.Protocol;
 public class Logout implements BaseProto {
 
     @Override
-    public byte[] convert() {
+    public byte[] serialization() {
         byte[] b = new byte[1];
         b[0] = PayloadOffset.LOGOUT;
         return b;
+    }
+
+    @Override
+    public Object deserialization(byte[] data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
