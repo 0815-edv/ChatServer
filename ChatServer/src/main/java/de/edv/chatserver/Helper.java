@@ -24,7 +24,6 @@
 package de.edv.chatserver;
 
 import com.google.gson.Gson;
-import de.edv.chatserver.Protocol.PayloadOffset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -33,11 +32,12 @@ import java.util.Arrays;
  * @author BackInBash
  */
 public class Helper {
-    public static byte[] resize(byte[] data){
+
+    public static byte[] resize(byte[] data) {
         return Arrays.copyOfRange(data, 1, data.length);
     }
-    
-    public static byte[] append(Object input, byte offset){
+
+    public static byte[] append(Object input, byte offset) {
         // ( ͡° ͜ʖ ͡°)
         byte[] type = new byte[1];
         type[0] = offset;

@@ -43,7 +43,7 @@ public class Logout implements BaseProto {
     public void setIP(String IP) {
         this.ip = IP;
     }
-    
+
     public User getUser() {
         return user;
     }
@@ -51,10 +51,10 @@ public class Logout implements BaseProto {
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     @Override
     public byte[] serialization() {
-       return append(this, PayloadOffset.LOGOUT);
+        return append(this, PayloadOffset.LOGOUT);
     }
 
     @Override

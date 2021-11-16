@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
  * @author Markus
  */
 public class User implements BaseProto {
+
     private String username;
     private StatusType status;
 

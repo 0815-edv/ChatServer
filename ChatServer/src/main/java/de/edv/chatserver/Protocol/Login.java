@@ -51,7 +51,7 @@ public class Login implements BaseProto {
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     @Override
     public byte[] serialization() {
         return append(this, PayloadOffset.LOGIN);

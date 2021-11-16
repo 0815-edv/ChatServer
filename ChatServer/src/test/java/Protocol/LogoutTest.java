@@ -35,15 +35,15 @@ import org.junit.Test;
 public class LogoutTest implements ProtoTest {
 
     private Logout logout;
-    
-    public LogoutTest(){
+
+    public LogoutTest() {
         logout = new Logout();
     }
-    
+
     @Override
     @Test
     public void serialization() {
-        if((logout.serialization()[0]) == PayloadOffset.LOGOUT){
+        if ((logout.serialization()[0]) == PayloadOffset.LOGOUT) {
             assertTrue(true);
         } else {
             assertTrue(false);
@@ -55,5 +55,5 @@ public class LogoutTest implements ProtoTest {
     public void deserialization() {
         assertTrue(true);
     }
-    
+
 }

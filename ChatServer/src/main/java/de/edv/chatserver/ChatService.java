@@ -60,19 +60,19 @@ public class ChatService {
 
     public void sendMessage(Message msg) {
         List<Socket> connections = new ArrayList<Socket>();
-        if(msg.getReciever() == null){
-            for(Login login: logins){
+        if (msg.getReciever() == null) {
+            for (Login login : logins) {
                 connections.add(openConnection(login.getIP(), port));
             }
         } else {
-            for(Login login: logins){
-                if(login.getUser().getUsername().equals(msg.getReciever().getUsername())){
+            for (Login login : logins) {
+                if (login.getUser().getUsername().equals(msg.getReciever().getUsername())) {
                     connections.add(openConnection(login.getIP(), port));
                 }
             }
         }
-        
-        for(Socket sock: connections){
+
+        for (Socket sock : connections) {
             try {
                 OutputStream output = sock.getOutputStream();
                 output.write(msg.serialization());
@@ -84,8 +84,8 @@ public class ChatService {
             }
         }
     }
-    
-    private Socket openConnection(String ip, int port){
+
+    private Socket openConnection(String ip, int port) {
         try {
             return new Socket(ip, port);
         } catch (IOException ex) {

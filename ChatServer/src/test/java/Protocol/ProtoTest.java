@@ -30,9 +30,10 @@ import org.junit.Test;
  * @author Markus
  */
 public interface ProtoTest {
+
     @Test
     public void serialization();
-    
+
     @Test
     public void deserialization();
 }

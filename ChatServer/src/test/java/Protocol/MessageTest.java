@@ -27,7 +27,7 @@ package Protocol;
  *
  * @author Markus
  */
-public class MessageTest implements ProtoTest{
+public class MessageTest implements ProtoTest {
 
     @Override
     public void serialization() {
@@ -38,5 +38,5 @@ public class MessageTest implements ProtoTest{
     public void deserialization() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
