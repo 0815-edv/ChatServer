@@ -60,18 +60,15 @@ public class ChatClientServerThread extends Thread {
                         case PayloadOffset.LOGIN:
                             Login login = (Login) new Login().deserialization(resize(data));
                             login.setIP(socket.getInetAddress().toString());
-                            chat.login(login);
                             break;
 
                         case PayloadOffset.LOGOUT:
                             Logout logout = (Logout) new Logout().deserialization(resize(data));
                             logout.setIP(socket.getInetAddress().toString());
-                            chat.logout(logout);
                             break;
 
                         case PayloadOffset.MESSAGE:
                             Message message = (Message) new Message().deserialization(resize(data));
-                            chat.sendMessage(message);
                             break;
 
                         case PayloadOffset.USER:
