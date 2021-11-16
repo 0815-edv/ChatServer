@@ -50,19 +50,24 @@ public class ServerThread extends Thread {
     public void run() {
         try {
             InputStream input = socket.getInputStream();
-
+            ChatService chat = new ChatService();
             do {
                 // Process Request
                 byte[] data = input.readAllBytes();
                 switch (data[0]) {
                     case PayloadOffset.LOGIN -> {
                         Login login = (Login) new Login().deserialization(resize(data));
+                        login.setIP(socket.getInetAddress().toString());
+                        chat.login(login);
                     }
                     case PayloadOffset.LOGOUT -> {
                         Logout logout = (Logout) new Logout().deserialization(resize(data));
+                        logout.setIP(socket.getInetAddress().toString());
+                        chat.logout(logout);
                     }
                     case PayloadOffset.MESSAGE -> {
                         Message message = (Message) new Message().deserialization(resize(data));
+                        chat.sendMessage(message);
                     }
                     case PayloadOffset.USER -> {
                         User user = (User) new User().deserialization(resize(data));

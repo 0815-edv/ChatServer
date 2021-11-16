@@ -34,7 +34,16 @@ import java.nio.charset.StandardCharsets;
 public class Logout implements BaseProto {
 
     private User user;
+    private String ip;
 
+    public String getIP() {
+        return ip;
+    }
+
+    public void setIP(String IP) {
+        this.ip = IP;
+    }
+    
     public User getUser() {
         return user;
     }

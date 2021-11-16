@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2021 hax0r.
+ * Copyright 2021 BackInBash.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,73 @@
 package de.edv.chatserver;
 
 import de.edv.chatserver.Protocol.Login;
+import de.edv.chatserver.Protocol.Logout;
 import de.edv.chatserver.Protocol.Message;
-import de.edv.chatserver.Protocol.User;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author hax0r
+ * @author BackInBash
  */
 public class ChatService {
+
     private static List<Login> logins = new ArrayList<Login>();
-    
-    public static void login(Login user){
-        if(!logins.contains(user))
-            logins.add(user);
+    private final int port = 2048;
+
+    public void login(Login login) {
+        if (!logins.contains(login)) {
+            logins.add(login);
+        }
     }
-    
-    public static void logout(Login user){
-        if(logins.contains(user))
-        logins.remove(user);
+
+    public void logout(Logout logout) {
+        for (Login login : logins) {
+            if (login.getUser().getUsername().equals(logout.getUser().getUsername())
+                    && login.getIP().equals(logout.getIP())) {
+                logins.remove(login);
+            }
+        }
     }
-    
-    public static void sendMessage(User from, User to, Message msg){
+
+    public void sendMessage(Message msg) {
+        List<Socket> connections = new ArrayList<Socket>();
+        if(msg.getReciever() == null){
+            for(Login login: logins){
+                connections.add(openConnection(login.getIP(), port));
+            }
+        } else {
+            for(Login login: logins){
+                if(login.getUser().getUsername().equals(msg.getReciever().getUsername())){
+                    connections.add(openConnection(login.getIP(), port));
+                }
+            }
+        }
         
+        for(Socket sock: connections){
+            try {
+                OutputStream output = sock.getOutputStream();
+                output.write(msg.serialization());
+                output.flush();
+                output.close();
+                sock.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private Socket openConnection(String ip, int port){
+        try {
+            return new Socket(ip, port);
+        } catch (IOException ex) {
+            Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

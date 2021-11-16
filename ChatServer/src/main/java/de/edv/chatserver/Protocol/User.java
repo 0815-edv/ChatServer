@@ -25,7 +25,6 @@ package de.edv.chatserver.Protocol;
 
 import com.google.gson.Gson;
 import static de.edv.chatserver.Helper.append;
-import java.awt.Color;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -34,7 +33,6 @@ import java.nio.charset.StandardCharsets;
  */
 public class User implements BaseProto {
     private String username;
-    private Color color;
     private StatusType status;
 
     public String getUsername() {
@@ -43,14 +41,6 @@ public class User implements BaseProto {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
     }
 
     public StatusType getStatus() {
