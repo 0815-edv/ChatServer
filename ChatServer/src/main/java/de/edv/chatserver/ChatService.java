@@ -41,12 +41,9 @@ import java.util.logging.Logger;
  */
 public class ChatService {
 
-    private static List<Login> logins;
-    private final int port = 2048;
+    private static List<Login> logins = Collections.synchronizedList(new ArrayList<Login>());
+    private final int clientPort = 2049;
 
-    public ChatService(){
-        logins = Collections.synchronizedList(new ArrayList<Login>());
-    }
     
     public void login(Login login) {
         if (!logins.contains(login)) {
@@ -69,12 +66,12 @@ public class ChatService {
         List<Socket> connections = new ArrayList<Socket>();
         if (msg.getReciever() == null) {
             for (Login login : logins) {
-                connections.add(openConnection(login.getIP(), port));
+                connections.add(openConnection(login.getIP(), clientPort));
             }
         } else {
             for (Login login : logins) {
                 if (login.getUser().getUsername().equals(msg.getReciever().getUsername())) {
-                    connections.add(openConnection(login.getIP(), port));
+                    connections.add(openConnection(login.getIP(), clientPort));
                 }
             }
         }

@@ -23,40 +23,48 @@
  */
 package de.edv.chatclient;
 
-import de.edv.chatserver.Protocol.BaseProto;
+import de.edv.chatserver.ServerThread;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Markus
  */
-public class ChatClientService {
-
+public class ChatClientServer {
+    private int port = 2049;
     private String ip;
-    private final int serverPort = 2048;
-    
-    public ChatClientService(String ip){
+
+    public ChatClientServer(String ip, int port) {
+        this.port = port;
         this.ip = ip;
     }
 
-    
-    public boolean send(BaseProto generic) {
-        try {
-            Socket socket = new Socket(ip, serverPort);
-            OutputStream output = socket.getOutputStream();
-            output.write(generic.serialization());
-            output.flush();
-            output.close();
-            socket.close();
-            return true;
-            
+    public ChatClientServer() {
+
+    }
+
+    /**
+     * Run SocketServer
+     */
+    public void start() {
+
+        try (ServerSocket serverSocket = new ServerSocket(port, 1024, InetAddress.getByName(ip))) {
+
+            System.out.println("Server is listening on port " + port);
+
+            while (true) {
+                Socket socket = serverSocket.accept();
+                System.out.println("New client connected: " + socket.getInetAddress().getHostAddress());
+
+                new ChatClientServerThread(socket).start();
+            }
+
         } catch (IOException ex) {
-            Logger.getLogger(ChatClientService.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Server exception: " + ex.getMessage());
+            ex.printStackTrace();
         }
-        return false;
     }
 }

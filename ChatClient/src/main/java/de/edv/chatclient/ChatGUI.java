@@ -27,6 +27,7 @@ import de.edv.chatserver.Protocol.Login;
 import de.edv.chatserver.Protocol.Logout;
 import de.edv.chatserver.Protocol.StatusType;
 import de.edv.chatserver.Protocol.User;
+import java.util.List;
 
 /**
  *
@@ -194,6 +195,12 @@ public class ChatGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void onlineUsers(List<User> users){
+        for(User user : users){
+            jUserArea.append(user.getUsername()+"("+user.getStatus().toString()+")");
+        }
+    }
+    
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
         // TODO add your handling code here:
         Login login = new Login();

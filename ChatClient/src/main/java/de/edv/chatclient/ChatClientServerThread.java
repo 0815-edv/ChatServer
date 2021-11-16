@@ -21,14 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.edv.chatserver;
+package de.edv.chatclient;
 
+import de.edv.chatserver.ChatService;
 import static de.edv.chatserver.Helper.resize;
 import de.edv.chatserver.Protocol.Login;
 import de.edv.chatserver.Protocol.Logout;
 import de.edv.chatserver.Protocol.Message;
 import de.edv.chatserver.Protocol.PayloadOffset;
 import de.edv.chatserver.Protocol.User;
+import de.edv.chatserver.ServerThread;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -39,11 +41,10 @@ import java.util.logging.Logger;
  *
  * @author Markus
  */
-public class ServerThread extends Thread {
-
+public class ChatClientServerThread extends Thread {
     private Socket socket;
 
-    public ServerThread(Socket socket) {
+    public ChatClientServerThread(Socket socket) {
         this.socket = socket;
     }
 
