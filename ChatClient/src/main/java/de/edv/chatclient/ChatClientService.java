@@ -24,6 +24,7 @@
 package de.edv.chatclient;
 
 import de.edv.chatserver.Protocol.BaseProto;
+import de.edv.chatserver.Protocol.Users;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -38,12 +39,25 @@ public class ChatClientService {
 
     private String ip;
     private final int serverPort = 2048;
-    
-    public ChatClientService(String ip){
+
+    public ChatClientService(String ip) {
         this.ip = ip;
     }
 
-    
+    public void getOnlineUsers() {
+        try {
+            Socket socket = new Socket(ip, serverPort);
+            Users users = new Users();
+            OutputStream output = socket.getOutputStream();
+            output.write(users.serialization());
+            output.flush();
+            output.close();
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ChatClientService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public boolean send(BaseProto generic) {
         try {
             Socket socket = new Socket(ip, serverPort);
@@ -53,7 +67,7 @@ public class ChatClientService {
             output.close();
             socket.close();
             return true;
-            
+
         } catch (IOException ex) {
             Logger.getLogger(ChatClientService.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -29,6 +29,7 @@ import de.edv.chatserver.Protocol.Logout;
 import de.edv.chatserver.Protocol.Message;
 import de.edv.chatserver.Protocol.PayloadOffset;
 import de.edv.chatserver.Protocol.User;
+import de.edv.chatserver.Protocol.Users;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -75,6 +76,11 @@ public class ServerThread extends Thread {
 
                         case PayloadOffset.USER:
                             User user = (User) new User().deserialization(resize(data));
+                            break;
+                        
+                        case PayloadOffset.USERS:
+                            Users users = (Users) new Users().deserialization(resize(data));
+                            chat.sendOnlineUsers(socket);
                             break;
 
                     }

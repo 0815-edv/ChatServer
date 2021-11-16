@@ -33,4 +33,5 @@ public class PayloadOffset {
     public static final byte LOGOUT = (byte) 0x02;
     public static final byte MESSAGE = (byte) 0x03;
     public static final byte USER = (byte) 0x04;
+    public static final byte USERS = (byte) 0x05;
 }

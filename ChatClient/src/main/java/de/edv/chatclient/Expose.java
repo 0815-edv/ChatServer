@@ -23,14 +23,15 @@
  */
 package de.edv.chatclient;
 
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+
 /**
  *
  * @author Markus
  */
-public class AppMain {
-    public static void main(String[] args) {
-        ChatGUI gui = new ChatGUI();
-        gui.setVisible(true);
-        new ChatClientServer().start(gui);
-    }
+public interface Expose {
+    public JTextArea getUserArea();
+    public JTextArea getChatArea();
+    public JLabel getStatusLabel();
 }

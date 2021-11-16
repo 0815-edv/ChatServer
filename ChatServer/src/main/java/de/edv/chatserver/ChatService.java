@@ -26,6 +26,7 @@ package de.edv.chatserver;
 import de.edv.chatserver.Protocol.Login;
 import de.edv.chatserver.Protocol.Logout;
 import de.edv.chatserver.Protocol.Message;
+import de.edv.chatserver.Protocol.Users;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -44,7 +45,6 @@ public class ChatService {
     private static List<Login> logins = Collections.synchronizedList(new ArrayList<Login>());
     private final int clientPort = 2049;
 
-    
     public void login(Login login) {
         if (!logins.contains(login)) {
             logins.add(login);
@@ -86,6 +86,22 @@ public class ChatService {
             } catch (IOException ex) {
                 Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    public void sendOnlineUsers(Socket socket) {
+        try {
+            OutputStream output = socket.getOutputStream();
+            Users users = new Users();
+            for (Login login : logins) {
+                users.addUser(login.getUser());
+            }
+            output.write(users.serialization());
+            output.flush();
+            output.close();
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

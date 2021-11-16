@@ -23,7 +23,6 @@
  */
 package de.edv.chatclient;
 
-import de.edv.chatserver.ServerThread;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -49,7 +48,7 @@ public class ChatClientServer {
     /**
      * Run SocketServer
      */
-    public void start() {
+    public void start(Expose e) {
 
         try (ServerSocket serverSocket = new ServerSocket(port, 1024, InetAddress.getByName(ip))) {
 
@@ -59,7 +58,7 @@ public class ChatClientServer {
                 Socket socket = serverSocket.accept();
                 System.out.println("New client connected: " + socket.getInetAddress().getHostAddress());
 
-                new ChatClientServerThread(socket).start();
+                new ChatClientServerThread(socket, e).start();
             }
 
         } catch (IOException ex) {

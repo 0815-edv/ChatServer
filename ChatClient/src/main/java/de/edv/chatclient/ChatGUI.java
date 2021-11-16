@@ -28,17 +28,18 @@ import de.edv.chatserver.Protocol.Logout;
 import de.edv.chatserver.Protocol.StatusType;
 import de.edv.chatserver.Protocol.User;
 import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 /**
  *
  * @author Markus
  */
-public class ChatGUI extends javax.swing.JFrame {
+public class ChatGUI extends javax.swing.JFrame implements Expose {
 
     /**
      * Creates new form ChatGUI
      */
-    private ChatClientService clientService;
     private User user = new User();
 
     public ChatGUI() {
@@ -195,29 +196,24 @@ public class ChatGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void onlineUsers(List<User> users){
-        for(User user : users){
-            jUserArea.append(user.getUsername()+"("+user.getStatus().toString()+")");
-        }
-    }
-    
+  
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
         // TODO add your handling code here:
         Login login = new Login();
         user.setUsername(jTextUsername.getText());
         user.setStatus(StatusType.ONLINE);
         login.setUser(user);
-        clientService = new ChatClientService(jTextServer.getText());
-        if(clientService.send(login)){
+        if(new ChatClientService(jTextServer.getText()).send(login)){
             jLabelStatus.setText("Online");
         }
+        new ChatClientService(jTextServer.getText()).getOnlineUsers();
     }//GEN-LAST:event_jButtonLoginActionPerformed
 
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
         // TODO add your handling code here:
         Logout logout = new Logout();
         logout.setUser(user);
-        if(clientService.send(logout)){
+        if(new ChatClientService(jTextServer.getText()).send(logout)){
             jLabelStatus.setText("Offline");
         }
     }//GEN-LAST:event_jButtonLogoutActionPerformed
@@ -274,4 +270,19 @@ public class ChatGUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextUsername;
     private javax.swing.JTextArea jUserArea;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public JTextArea getUserArea() {
+        return jUserArea;
+    }
+
+    @Override
+    public JTextArea getChatArea() {
+        return jChatArea;
+    }
+
+    @Override
+    public JLabel getStatusLabel() {
+        return jLabelStatus;
+    }
 }

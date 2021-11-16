@@ -21,16 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.edv.chatclient;
+package de.edv.chatserver.Protocol;
+
+import com.google.gson.Gson;
+import static de.edv.chatserver.Helper.append;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Markus
  */
-public class AppMain {
-    public static void main(String[] args) {
-        ChatGUI gui = new ChatGUI();
-        gui.setVisible(true);
-        new ChatClientServer().start(gui);
+public class Users implements BaseProto {
+
+    private List<User> users = new ArrayList<User>();
+
+    public List<User> getUsers() {
+        return users;
     }
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+    
+    @Override
+    public byte[] serialization() {
+        // ( ͡° ͜ʖ ͡°)
+        return append(this, PayloadOffset.USER);
+    }
+
+    @Override
+    public Object deserialization(byte[] data) {
+        return new Gson().fromJson(new String(data, StandardCharsets.UTF_8), this.getClass());
+    }
+    
 }

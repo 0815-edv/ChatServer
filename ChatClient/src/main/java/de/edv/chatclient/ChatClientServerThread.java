@@ -30,10 +30,13 @@ import de.edv.chatserver.Protocol.Logout;
 import de.edv.chatserver.Protocol.Message;
 import de.edv.chatserver.Protocol.PayloadOffset;
 import de.edv.chatserver.Protocol.User;
+import de.edv.chatserver.Protocol.Users;
 import de.edv.chatserver.ServerThread;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,10 +45,13 @@ import java.util.logging.Logger;
  * @author Markus
  */
 public class ChatClientServerThread extends Thread {
-    private Socket socket;
 
-    public ChatClientServerThread(Socket socket) {
+    private Socket socket;
+    private Expose e;
+
+    public ChatClientServerThread(Socket socket, Expose e) {
         this.socket = socket;
+        this.e = e;
     }
 
     public void run() {
@@ -60,19 +66,30 @@ public class ChatClientServerThread extends Thread {
                         case PayloadOffset.LOGIN:
                             Login login = (Login) new Login().deserialization(resize(data));
                             login.setIP(socket.getInetAddress().toString());
+                            e.getStatusLabel().setText("Online");
                             break;
 
                         case PayloadOffset.LOGOUT:
                             Logout logout = (Logout) new Logout().deserialization(resize(data));
                             logout.setIP(socket.getInetAddress().toString());
+                            e.getStatusLabel().setText("Offline");
                             break;
 
                         case PayloadOffset.MESSAGE:
                             Message message = (Message) new Message().deserialization(resize(data));
+                            e.getChatArea().append(new SimpleDateFormat("HH:mm:ss").format(new Date())
+                                    + " " + message.getSender().getUsername() + " " + message.getMessage());
                             break;
 
                         case PayloadOffset.USER:
                             User user = (User) new User().deserialization(resize(data));
+                            break;
+
+                        case PayloadOffset.USERS:
+                            Users users = (Users) new Users().deserialization(resize(data));
+                            for(User usr: users.getUsers()){
+                                e.getUserArea().append(usr.getUsername()+" ("+usr.getStatus()+")");
+                            }
                             break;
 
                     }
