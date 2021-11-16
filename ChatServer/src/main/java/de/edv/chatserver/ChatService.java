@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,9 +41,13 @@ import java.util.logging.Logger;
  */
 public class ChatService {
 
-    private static List<Login> logins = new ArrayList<Login>();
+    private static List<Login> logins;
     private final int port = 2048;
 
+    public ChatService(){
+        logins = Collections.synchronizedList(new ArrayList<Login>());
+    }
+    
     public void login(Login login) {
         if (!logins.contains(login)) {
             logins.add(login);
@@ -50,12 +55,14 @@ public class ChatService {
     }
 
     public void logout(Logout logout) {
+        var delete = new Object();
         for (Login login : logins) {
             if (login.getUser().getUsername().equals(logout.getUser().getUsername())
                     && login.getIP().equals(logout.getIP())) {
-                logins.remove(login);
+                delete = login;
             }
         }
+        logins.remove(delete);
     }
 
     public void sendMessage(Message msg) {
