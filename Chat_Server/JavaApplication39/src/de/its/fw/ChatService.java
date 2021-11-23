@@ -4,12 +4,8 @@
  */
 package de.its.fw;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,7 +23,7 @@ public class ChatService implements Runnable {
     private ServerSocket server;
     private DefaultListModel ListServer;
     private DefaultListModel ListNachrichten;
-    private ArrayList<InetAddress> clients;
+    private ArrayList<InetAddress> clients = new ArrayList<InetAddress>();
 
     public ChatService(DefaultListModel lstModel, DefaultListModel lstip) {
 
@@ -69,6 +65,19 @@ public class ChatService implements Runnable {
             }
 
         }
-
+    }
+    @Override
+    public void finalize(){
+        try {
+            server.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                super.finalize();
+            } catch (Throwable ex) {
+                Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }
