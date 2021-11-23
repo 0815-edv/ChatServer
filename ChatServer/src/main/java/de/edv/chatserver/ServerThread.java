@@ -61,17 +61,20 @@ public class ServerThread extends Thread {
                             Login login = (Login) new Login().deserialization(resize(data));
                             login.setIP(socket.getInetAddress().toString());
                             chat.login(login);
+                            System.out.println("Recieved Login Message from: "+login.getUser().getUsername());
                             break;
 
                         case PayloadOffset.LOGOUT:
                             Logout logout = (Logout) new Logout().deserialization(resize(data));
                             logout.setIP(socket.getInetAddress().toString());
                             chat.logout(logout);
+                            System.out.println("Recieved Logout Message from: "+logout.getUser().getUsername());
                             break;
 
                         case PayloadOffset.MESSAGE:
                             Message message = (Message) new Message().deserialization(resize(data));
                             chat.sendMessage(message);
+                            System.out.println("Recieved Message from: "+message.getSender().getUsername()+" to: "+message.getReciever().getUsername());
                             break;
 
                         case PayloadOffset.USER:
@@ -81,6 +84,7 @@ public class ServerThread extends Thread {
                         case PayloadOffset.USERS:
                             Users users = (Users) new Users().deserialization(resize(data));
                             chat.sendOnlineUsers(socket);
+                            System.out.println("Get Online Users");
                             break;
 
                     }
