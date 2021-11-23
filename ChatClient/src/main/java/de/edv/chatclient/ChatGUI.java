@@ -25,9 +25,10 @@ package de.edv.chatclient;
 
 import de.edv.chatserver.Protocol.Login;
 import de.edv.chatserver.Protocol.Logout;
+import de.edv.chatserver.Protocol.Message;
+import de.edv.chatserver.Protocol.MessageType;
 import de.edv.chatserver.Protocol.StatusType;
 import de.edv.chatserver.Protocol.User;
-import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
@@ -158,6 +159,11 @@ public class ChatGUI extends javax.swing.JFrame implements Expose {
         jScrollPane2.setViewportView(jChatArea);
 
         jButtonSend.setText("Send");
+        jButtonSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSendActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -217,6 +223,14 @@ public class ChatGUI extends javax.swing.JFrame implements Expose {
             jLabelStatus.setText("Offline");
         }
     }//GEN-LAST:event_jButtonLogoutActionPerformed
+
+    private void jButtonSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
+        Message msg = new Message();
+        msg.setSender(user);
+        msg.setReciever(null);
+        msg.setMessage(jTextMessage.getText());
+        msg.setType(MessageType.BRODCAST);
+    }//GEN-LAST:event_jButtonSendActionPerformed
 
     /**
      * @param args the command line arguments

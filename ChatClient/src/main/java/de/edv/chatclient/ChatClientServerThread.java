@@ -64,18 +64,21 @@ public class ChatClientServerThread extends Thread {
                 if (data.length > 0) {
                     switch (data[0]) {
                         case PayloadOffset.LOGIN:
+                            System.out.println("Recieved Login Confirmation from Server");
                             Login login = (Login) new Login().deserialization(resize(data));
                             login.setIP(socket.getInetAddress().toString());
                             e.getStatusLabel().setText("Online");
                             break;
 
                         case PayloadOffset.LOGOUT:
+                            System.out.println("Recieved Logout Confirmation from Server");
                             Logout logout = (Logout) new Logout().deserialization(resize(data));
                             logout.setIP(socket.getInetAddress().toString());
                             e.getStatusLabel().setText("Offline");
                             break;
 
                         case PayloadOffset.MESSAGE:
+                            System.out.println("Recieved Message from Server");
                             Message message = (Message) new Message().deserialization(resize(data));
                             e.getChatArea().append(new SimpleDateFormat("HH:mm:ss").format(new Date())
                                     + " " + message.getSender().getUsername() + " " + message.getMessage());
@@ -86,6 +89,7 @@ public class ChatClientServerThread extends Thread {
                             break;
 
                         case PayloadOffset.USERS:
+                            System.out.println("Recieved Online Users from Server");
                             Users users = (Users) new Users().deserialization(resize(data));
                             for(User usr: users.getUsers()){
                                 e.getUserArea().append(usr.getUsername()+" ("+usr.getStatus()+")");
