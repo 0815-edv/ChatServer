@@ -8,15 +8,15 @@ package de.its.fw;
  *
  * @author flori
  */
-public class appcontroller {
+public class appClientcontroller {
 
     /**
      * @param args the command line arguments
      */
-    private ChatGUI gui = null;
+    private ChatClientGUI gui = null;
     
     private void initService(){
-        gui = new ChatGUI();
+        gui = new ChatClientGUI();
         gui.setVisible(true);
     }
     
@@ -25,7 +25,7 @@ public class appcontroller {
         java.awt.EventQueue.invokeLater(new Runnable() {
             
             public void run() {
-                appcontroller appController1 = new appcontroller();
+                appClientcontroller appController1 = new appClientcontroller();
                 appController1.initService();
             }
         });

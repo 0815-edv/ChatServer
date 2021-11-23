@@ -12,19 +12,24 @@ import javax.swing.DefaultListModel;
  *
  * @author flori
  */
-public class ChatGUI extends javax.swing.JFrame {
+public class ChatClientGUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form ChatGUI
+     * Creates new form ChatClientGUI
      */
     
     private Socket toServer;
     private SocketAddress sa;
     private DefaultListModel dlm;
-    public ChatGUI() {
+    
+    Thread SSLThreat = null;
+    private ServerSocketListener ssl = null;
+    
+    public ChatClientGUI() {
         initComponents();
         dlm = new DefaultListModel();
         lstnachrichten.setModel(dlm);
+        
     }
 
     /**
@@ -55,6 +60,11 @@ public class ChatGUI extends javax.swing.JFrame {
         jLabel1.setText("Server-IP-Adresse");
 
         tfServerIP.setText("localhost");
+        tfServerIP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfServerIPActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Server-Port");
 
@@ -104,7 +114,6 @@ public class ChatGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(lstnachrichten);
 
         btnsent.setText("Senden");
-        btnsent.setActionCommand("Senden");
         btnsent.setEnabled(false);
         btnsent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,10 +177,12 @@ public class ChatGUI extends javax.swing.JFrame {
             btnsent.setEnabled(true);
             toServer.close();
             
+            ssl = new ServerSocketListener(dlm);
+            SSLThreat = new Thread(ssl);
             
             
         } catch (IOException ex) {
-            Logger.getLogger(ChatGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatClientGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_btnconnectActionPerformed
@@ -188,10 +199,14 @@ public class ChatGUI extends javax.swing.JFrame {
             dlm.addElement(txfsendmessage.getText());
             dOut.write(b);
         } catch (IOException ex) {
-            Logger.getLogger(ChatGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatClientGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_btnsentActionPerformed
+
+    private void tfServerIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfServerIPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfServerIPActionPerformed
 
     /**
      * @param args the command line arguments
