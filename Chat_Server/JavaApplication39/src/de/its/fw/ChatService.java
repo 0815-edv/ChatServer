@@ -54,7 +54,7 @@ public class ChatService implements Runnable {
                 
                 if (inputString.contains(message)) {
                     ListServer.addElement(client.getInetAddress());
-                    //clients.add(client.getInetAddress());
+                    clients.add(client.getInetAddress());
                 } else {
                     ListNachrichten.addElement("From: " + client.getInetAddress() + ":" + message);
                     System.out.println(message);
