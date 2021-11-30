@@ -198,6 +198,7 @@ public class ChatClientGUI extends javax.swing.JFrame {
             byte b[] = txfsendmessage.getText().getBytes();
             dlm.addElement(txfsendmessage.getText());
             dOut.write(b);
+            toServer.close();
         } catch (IOException ex) {
             Logger.getLogger(ChatClientGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
